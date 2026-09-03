@@ -796,7 +796,7 @@ document.getElementById('cloud-sync-btn').addEventListener('click', pushToCloud)
 // === 导出 JSON（备份 / 跨设备同步） ===
 document.getElementById('export-btn').addEventListener('click', () => {
   const payload = {
-    app: 'stock_tracker_doppio',
+    app: 'stock_tracker_doppio_lenient',
     version: 1,
     exportedAt: new Date().toISOString(),
     stocks: stocks,
@@ -834,8 +834,8 @@ importFile.addEventListener('change', e => {
     try{
       const data = JSON.parse(ev.target.result);
       if(!data || !Array.isArray(data.stocks)) throw new Error('文件格式不对：缺少 stocks 数组');
-      if(data.app && data.app !== 'stock_tracker_doppio'){
-        if(!confirm(`这是 ${data.app} 的备份，不是 stock_tracker_doppio 的。继续导入吗？`)) return;
+      if(data.app && data.app !== 'stock_tracker_doppio_lenient'){
+        if(!confirm(`这是 ${data.app} 的备份，不是 stock_tracker_doppio_lenient 的。继续导入吗？`)) return;
       }
       const n = data.stocks.length;
       if(!confirm(`将覆盖当前 ${stocks.length} 只股票，导入 ${n} 只新数据。继续？`)) return;
@@ -1097,7 +1097,7 @@ async function pushToCloud(){
   setSyncBadge('pushing');
   try{
     const payload = {
-      app: 'stock_tracker_doppio',
+      app: 'stock_tracker_doppio_lenient',
       version: 1,
       updatedAt: new Date().toISOString(),
       stocks: stocks,
