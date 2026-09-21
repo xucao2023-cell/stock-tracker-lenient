@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-09-21T20:39:49.825Z",
+  "updatedAt": "2026-09-21T20:39:52.269Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -32,7 +32,7 @@
     {
       "name": "E.ON",
       "code": "EOAN.DE",
-      "price": 17.27,
+      "price": 17.38,
       "currency": "€",
       "note": "DCF 中枢 €19 / 区间 13-19",
       "group": "watch_TR",
@@ -374,7 +374,7 @@
       "high1": 57,
       "low2": 45,
       "high2": 64,
-      "price": 53.67,
+      "price": 54.18,
       "currency": "€",
       "note": "",
       "memo": "26年半年报后的估值",
@@ -387,7 +387,7 @@
       "high1": 1600,
       "low2": 842,
       "high2": 1943,
-      "price": 1486,
+      "price": 1481,
       "currency": "€",
       "note": "",
       "memo": "",
@@ -400,7 +400,7 @@
       "high1": 510,
       "low2": 390,
       "high2": 560,
-      "price": 504,
+      "price": 509,
       "currency": "€",
       "note": "",
       "memo": "",
