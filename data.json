@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-10-30T20:40:53.041Z",
+  "updatedAt": "2026-10-30T21:00:48.648Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -419,15 +419,16 @@
     {
       "name": "慕尼黑再保险",
       "code": "MUV2.DE",
-      "low1": 454,
-      "high1": 510,
-      "low2": 390,
-      "high2": 560,
+      "low1": 520,
+      "high1": 580,
+      "low2": 444,
+      "high2": 640,
       "price": 568,
       "currency": "€",
-      "note": "",
+      "note": "2026-10-31 重估｜合理区间520–580欧元/股，中枢约550欧元/股；熊444欧元/股、牛640欧元/股。P/B–ROE＋股息贴现；已纳入10-23业绩预告，完整财报仍截至2026H1，正式Q3待11-12。含回购模型终值占80.5%，仅作条件参照。",
       "memo": "",
-      "group": "Trade Republic"
+      "group": "Trade Republic",
+      "valuationDate": "2026-10-31"
     },
     {
       "name": "Siltronic",
