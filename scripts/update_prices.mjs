@@ -112,20 +112,20 @@ async function getFxRate(from, to) {
   return rate;
 }
 
-// A stock needs FX conversion when its `currency` field is EUR but the
-// upstream quote source returns in a different currency. Currently:
+// Convert upstream quote currency to the stock's configured display currency.
 //   - LSE-listed (.L) codes: Yahoo returns GBP → EUR
 //   - HK codes (.HK) in Trade Republic: Tencent returns HKD → EUR
 //   - US codes (.US) in Trade Republic: Tencent returns USD → EUR
-// Detected by group/currency/code combination; source-currency decided below.
+//   - Korean ordinary shares (.KS) displayed in USD: KRW → USD
 function needsFxConversion(stock) {
+  if (stock.code.endsWith('.KS') && stock.currency === '$') return { from: 'KRW', to: 'USD' };
   if (stock.currency !== '€') return null; // not targeted to EUR
   // Groups that should report in EUR (regardless of native quote currency)
   const EUR_TARGET_GROUPS = new Set(['Trade Republic', 'watch_TR']);
   if (!EUR_TARGET_GROUPS.has(stock.group)) return null;
-  if (stock.code.endsWith('.L')) return 'GBP';   // LSE = GBP via Yahoo
-  if (stock.code.endsWith('.HK')) return 'HKD';  // HKEX = HKD via Tencent
-  if (stock.code.endsWith('.US')) return 'USD';  // US = USD via Tencent
+  if (stock.code.endsWith('.L')) return { from: 'GBP', to: 'EUR' };
+  if (stock.code.endsWith('.HK')) return { from: 'HKD', to: 'EUR' };
+  if (stock.code.endsWith('.US')) return { from: 'USD', to: 'EUR' };
   return null; // already EUR (e.g. .DE, .PA, .AS codes already trade in EUR)
 }
 
@@ -224,26 +224,23 @@ async function main() {
   }
 
   // FX: pre-fetch rates for any stock needing conversion.
-  // needsFxConversion() returns the source currency (e.g. 'GBP', 'HKD', 'USD')
-  // or null if the stock is already priced in EUR.
-  const fxStocks = stocks.map((s) => ({ stock: s, src: needsFxConversion(s) })).filter((x) => x.src);
-  const fxRates = new Map(); // src currency → rate to EUR
+  const fxStocks = stocks.map((s) => ({ stock: s, pair: needsFxConversion(s) })).filter((x) => x.pair);
+  const fxRates = new Map(); // `${from}->${to}` → conversion rate
   if (fxStocks.length > 0) {
-    // Dedup by source currency
-    const uniqueSrc = [...new Set(fxStocks.map((x) => x.src))];
-    for (const src of uniqueSrc) {
+    const pairs = new Map(fxStocks.map(({pair}) => [`${pair.from}->${pair.to}`, pair]));
+    for (const [key, {from, to}] of pairs) {
       try {
-        const rate = await getFxRate(src, 'EUR');
-        fxRates.set(src, rate);
+        const rate = await getFxRate(from, to);
+        fxRates.set(key, rate);
       } catch (e) {
-        console.warn(`[fx] FX fetch failed for ${src}→EUR: ${e.message}`);
+        console.warn(`[fx] FX fetch failed for ${from}→${to}: ${e.message}`);
       }
     }
-    for (const [src, rate] of fxRates) {
-      const codes = fxStocks.filter((x) => x.src === src).map((x) => x.stock.code).join(', ');
-      console.log(`[fx] ${src}→EUR = ${rate} (will convert: ${codes})`);
+    for (const [key, rate] of fxRates) {
+      const codes = fxStocks.filter(({pair}) => `${pair.from}->${pair.to}` === key).map((x) => x.stock.code).join(', ');
+      console.log(`[fx] ${key} = ${rate} (will convert: ${codes})`);
     }
-    const missing = fxStocks.filter((x) => !fxRates.has(x.src)).map((x) => x.stock.code);
+    const missing = fxStocks.filter(({pair}) => !fxRates.has(`${pair.from}->${pair.to}`)).map((x) => x.stock.code);
     if (missing.length > 0) console.warn(`[fx] SKIP (no FX): ${missing.join(', ')}`);
   }
 
@@ -264,8 +261,9 @@ async function main() {
         // FX: Tencent reports in source currency (HKD for .HK, USD for .US,
         // CNY for .SH/.SZ, etc.). For TR group stocks targeting EUR, convert.
         const fxSrc = needsFxConversion(s);
-        if (fxSrc && fxRates.has(fxSrc)) {
-          newPrice = newPrice * fxRates.get(fxSrc);
+        const fxKey = fxSrc && `${fxSrc.from}->${fxSrc.to}`;
+        if (fxSrc && fxRates.has(fxKey)) {
+          newPrice = newPrice * fxRates.get(fxKey);
           src = 'tencent+fx';
         } else if (fxSrc) {
           newPrice = null; // FX unavailable → SKIP
@@ -279,8 +277,9 @@ async function main() {
         // FX: Yahoo reports in source currency (GBP for .L, EUR for .DE/.PA/.AS).
         // For TR group .L stocks targeting EUR, convert.
         const fxSrc = needsFxConversion(s);
-        if (fxSrc && fxRates.has(fxSrc)) {
-          newPrice = newPrice * fxRates.get(fxSrc);
+        const fxKey = fxSrc && `${fxSrc.from}->${fxSrc.to}`;
+        if (fxSrc && fxRates.has(fxKey)) {
+          newPrice = newPrice * fxRates.get(fxKey);
           src = 'yahoo+fx';
         } else if (fxSrc) {
           newPrice = null; // FX unavailable → SKIP
