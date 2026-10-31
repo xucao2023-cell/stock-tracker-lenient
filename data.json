@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-10-31T10:28:08.854Z",
+  "updatedAt": "2026-10-31T16:54:32.304Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -545,17 +545,40 @@
     },
     {
       "name": "SK海力士",
-      "code": "000660.KS",
-      "price": 1061.96,
+      "code": "SKHY.US",
+      "price": 149.21,
       "currency": "$",
-      "note": "2026-10-28｜2026年三季度初步业绩后重估",
+      "note": "2026-11-01｜2026年三季度初步业绩后情景复核",
       "group": "Trading 212",
-      "low1": 709.43,
-      "high1": 858.79,
-      "low2": 665.53,
-      "high2": 1246.36,
+      "low1": 134.3,
+      "high1": 139.75,
+      "low2": 126.26,
+      "high2": 154.73,
       "memo": "",
-      "valuationDate": "2026-10-28"
+      "valuationDate": "2026-11-01",
+      "priceUnit": "USD/ADS",
+      "priceAsOf": "2026-10-30 regular-session close",
+      "priceSource": "Yahoo SKHY actual ADS quote (USD)",
+      "valuationHorizon": 6,
+      "valuationScenarios": {
+        "bear": {
+          "price": 126.25626647804346,
+          "normalNopatUsd100m": 389.81405421551835,
+          "exitMultiple": 7.046089727607322
+        },
+        "base": {
+          "price": 137.0287668234301,
+          "normalNopatUsd100m": 389.81405421551835,
+          "exitMultiple": 11.0
+        },
+        "bull": {
+          "price": 154.72710894357513,
+          "normalNopatUsd100m": 487.2675677693974,
+          "exitMultiple": 13.652882249372608
+        }
+      },
+      "valuationReport": "reports/SKHY-20261101.html",
+      "valuationCaveat": "熊档为倍数压力情景，仍假设前三年高利润兑现；H为10—12倍退出敏感带，Z为熊—牛两端，均非保证价格。"
     },
     {
       "name": "英特尔",

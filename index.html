@@ -929,6 +929,48 @@ const DEFAULT_STOCKS = DEFAULT_BASE.map(({lo, hi, wl, wh, ...rest}) => ({
   memo:''
 }));
 
+// One-time migration from the old Korean ordinary-share row to SKHY ADS.
+// Keep the user's name, group and personal memo. Later cloud snapshots own valuations.
+const SKHY_ADS_MIGRATION = {
+  "code": "SKHY.US",
+  "currency": "$",
+  "price": 149.21,
+  "priceUnit": "USD/ADS",
+  "priceAsOf": "2026-10-30 regular-session close",
+  "priceSource": "Yahoo SKHY actual ADS quote (USD)",
+  "low1": 134.3,
+  "high1": 139.75,
+  "low2": 126.26,
+  "high2": 154.73,
+  "note": "2026-11-01｜2026年三季度初步业绩后情景复核",
+  "valuationDate": "2026-11-01",
+  "valuationHorizon": 6,
+  "valuationScenarios": {
+    "bear": {
+      "price": 126.25626647804346,
+      "normalNopatUsd100m": 389.81405421551835,
+      "exitMultiple": 7.046089727607322
+    },
+    "base": {
+      "price": 137.0287668234301,
+      "normalNopatUsd100m": 389.81405421551835,
+      "exitMultiple": 11.0
+    },
+    "bull": {
+      "price": 154.72710894357513,
+      "normalNopatUsd100m": 487.2675677693974,
+      "exitMultiple": 13.652882249372608
+    }
+  },
+  "valuationReport": "reports/SKHY-20261101.html",
+  "valuationCaveat": "熊档为倍数压力情景，仍假设前三年高利润兑现；H为10—12倍退出敏感带，Z为熊—牛两端，均非保证价格。"
+};
+function migrateSkhyAds(s){
+  if(s.code !== '000660.KS') return false;
+  Object.assign(s, SKHY_ADS_MIGRATION);
+  return true;
+}
+
 let stocks = load();
 
 // 排序状态（从 localStorage 恢复）
@@ -1010,6 +1052,7 @@ function load(){
   list.forEach(s => {
     if(!GROUPS.includes(s.group)){ s.group = inferGroup(s.code); dirty = true; }
     if(typeof s.memo !== 'string'){ s.memo = ''; dirty = true; }
+    if(migrateSkhyAds(s)) dirty = true;
     // 老数据只有 low/high 时，复制为 hermes 套；zcode 套 = hermes ±15%
     if(typeof s.low1 !== 'number' && typeof s.low === 'number'){
       s.low1 = s.low; s.high1 = s.high;
@@ -1038,8 +1081,17 @@ async function fetchCloud(){
 }
 
 function applyCloudData(data, fromCloud){
-  // 替换 stocks 为云端数据，然后重新渲染
-  stocks = data.stocks;
+  // Preserve the personal memo/group when the holding changes instrument code.
+  const localSkhy = stocks.find(s => s.code === 'SKHY.US' || s.code === '000660.KS');
+  stocks = data.stocks.map(s => {
+    const next = {...s};
+    migrateSkhyAds(next);
+    if(next.code === 'SKHY.US' && localSkhy){
+      if(localSkhy.memo) next.memo = localSkhy.memo;
+      if(GROUPS.includes(localSkhy.group)) next.group = localSkhy.group;
+    }
+    return next;
+  });
   // 同步 settings
   if(data.settings){
     if(data.settings.theme)      try{ localStorage.setItem(LS_THEME, data.settings.theme); }catch(e){}
@@ -1194,7 +1246,8 @@ function judgeZh(s){
 // 偏离比例以 H 套中位数为基准
 function gapPct(s){
   if(judge(s) === 'pending') return NaN;
-  const mid = (s.low1 + s.high1) / 2;
+  const base = s.valuationScenarios?.base?.price;
+  const mid = validBound(base) ? base : (s.low1 + s.high1) / 2;
   if(mid === 0) return 0;
   return (s.price - mid) / mid * 100;
 }
@@ -1342,6 +1395,18 @@ function render(){
   bindEvents();
 }
 
+function valuationScenarioHTML(s){
+  const v = s.valuationScenarios;
+  if(!v || !['bear','base','bull'].every(k => validBound(v[k]?.price))) return '';
+  const values = [['bear','熊'],['base','中'],['bull','牛']]
+    .map(([k,label]) => `${label} $${v[k].price.toFixed(2)}`).join(' · ');
+  const report = /^reports\/[A-Za-z0-9_-]+\.html$/.test(s.valuationReport || '')
+    ? `<a href="${escapeHtml(s.valuationReport)}" target="_blank" rel="noopener">${escapeHtml(s.valuationHorizon)}年正常化 · 估值过程 ↗</a>` : '';
+  return `<div class="note" style="font-size:10px;margin-top:5px;line-height:1.7" title="${escapeHtml(s.valuationCaveat)}">
+    <span>${values}</span><br>${report}
+  </div>`;
+}
+
 function stockRowHTML(s){
   const status = judge(s);
   const gp = gapPct(s);
@@ -1371,12 +1436,13 @@ function stockRowHTML(s){
   return `
     <tr data-code="${escapeHtml(s.code)}">
       <td>
-        <div class="stock-cell">
+        <div class="stock-cell" ${s.valuationScenarios ? 'style="min-width:190px"' : ''}>
           <div class="name">${escapeHtml(s.name)}</div>
           <div class="code">
-            <span class="cur-badge" title="货币单位">${escapeHtml(s.currency || '¥')}</span>${escapeHtml(s.code)}
+            <span class="cur-badge" title="货币单位">${escapeHtml(s.currency || '¥')}</span>${escapeHtml(s.code)}${s.priceUnit === 'USD/ADS' ? ' · 美元/份ADS' : ''}
           </div>
           ${s.note ? `<div class="note" style="font-size:10px;color:var(--muted-2);margin-top:2px;">${escapeHtml(s.note)}</div>` : ''}
+          ${valuationScenarioHTML(s)}
         </div>
       </td>
       <td>

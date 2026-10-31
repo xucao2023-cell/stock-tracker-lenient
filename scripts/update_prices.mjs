@@ -69,6 +69,8 @@ function classifyMarket(code) {
   // Tencent covers: A-share (6-digit), HK (5-digit .HK), US (letters or .US).
   // Yahoo covers: everything else (.DE, .PA, etc.).
   const c = code.trim();
+  // SKHY is the USD-quoted ADS. Never substitute KRW ordinary-share parity.
+  if (c === 'SKHY.US' || c === 'SKHY') return 'yahoo';
   const isA = /^\d{6}(\.SH|\.SZ)?$/.test(c);
   const isHK = /^\d{5}\.HK$/.test(c);
   const isUS = /^[A-Za-z.]+(\.US)?$/.test(c) && !/\.(DE|PA|L|AS|NL|IT|ES|CH)$/i.test(c);
@@ -170,7 +172,7 @@ async function fetchYahooOne(symbol, attempt = 0) {
   const prev  = r?.meta?.chartPreviousClose;
   const currency = r?.meta?.currency;
   if (!Number.isFinite(price)) throw new Error(`Yahoo ${symbol} no price in response`);
-  return { price, prev, currency };
+  return { price, prev, currency, symbol: r.meta.symbol, marketTime: r.meta.regularMarketTime };
 }
 
 // ---------- main ----------
@@ -272,6 +274,12 @@ async function main() {
     } else {
       const got = yahooPrices[s.code];
       if (got) {
+        if ((s.code === 'SKHY.US' || s.code === 'SKHY') &&
+            (got.currency !== 'USD' || got.symbol !== 'SKHY')) {
+          report.push(`${s.code} SKIP (expected actual SKHY ADS quote in USD)`);
+          failed++;
+          continue;
+        }
         newPrice = got.price;
         src = 'yahoo';
         // FX: Yahoo reports in source currency (GBP for .L, EUR for .DE/.PA/.AS).
@@ -312,6 +320,13 @@ async function main() {
     );
     if (!DRY_RUN) {
       s.price = parsedFormatted;
+      if (s.code === 'SKHY.US' || s.code === 'SKHY') {
+        const quote = yahooPrices[s.code];
+        s.priceSource = 'Yahoo SKHY actual ADS quote (USD)';
+        if (Number.isFinite(quote?.marketTime)) {
+          s.priceAsOf = new Date(quote.marketTime * 1000).toISOString();
+        }
+      }
     }
     updated++;
   }
