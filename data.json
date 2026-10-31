@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-10-31T16:54:32.304Z",
+  "updatedAt": "2026-10-31T20:47:36.992Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -553,7 +553,7 @@
       "low1": 134.3,
       "high1": 139.75,
       "low2": 126.26,
-      "high2": 154.73,
+      "high2": 149.17,
       "memo": "",
       "valuationDate": "2026-11-01",
       "priceUnit": "USD/ADS",
@@ -564,21 +564,25 @@
         "bear": {
           "price": 126.25626647804346,
           "normalNopatUsd100m": 389.81405421551835,
-          "exitMultiple": 7.046089727607322
+          "exitMultiple": 7.046089727607322,
+          "horizon": 6
         },
         "base": {
           "price": 137.0287668234301,
           "normalNopatUsd100m": 389.81405421551835,
-          "exitMultiple": 11.0
+          "exitMultiple": 11.0,
+          "horizon": 6
         },
         "bull": {
-          "price": 154.72710894357513,
-          "normalNopatUsd100m": 487.2675677693974,
-          "exitMultiple": 13.652882249372608
+          "price": 149.17251026951598,
+          "normalNopatUsd100m": 389.81405421551807,
+          "exitMultiple": 11.0,
+          "horizon": 8
         }
       },
       "valuationReport": "reports/SKHY-20261101.html",
-      "valuationCaveat": "熊档为倍数压力情景，仍假设前三年高利润兑现；H为10—12倍退出敏感带，Z为熊—牛两端，均非保证价格。"
+      "valuationCaveat": "中档第6年、牛档第8年正常化，正常利润与11倍退出相同；熊档为六年路径的倍数压力，仍假设前三年高利润兑现。H为10—12倍敏感带，Z为熊—牛两端。",
+      "valuationHorizonLabel": "中6年 · 牛8年"
     },
     {
       "name": "英特尔",

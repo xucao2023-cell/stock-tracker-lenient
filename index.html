@@ -933,37 +933,41 @@ const DEFAULT_STOCKS = DEFAULT_BASE.map(({lo, hi, wl, wh, ...rest}) => ({
 // Keep the user's name, group and personal memo. Later cloud snapshots own valuations.
 const SKHY_ADS_MIGRATION = {
   "code": "SKHY.US",
-  "currency": "$",
   "price": 149.21,
-  "priceUnit": "USD/ADS",
-  "priceAsOf": "2026-10-30 regular-session close",
-  "priceSource": "Yahoo SKHY actual ADS quote (USD)",
+  "currency": "$",
+  "note": "2026-11-01｜2026年三季度初步业绩后情景复核",
   "low1": 134.3,
   "high1": 139.75,
   "low2": 126.26,
-  "high2": 154.73,
-  "note": "2026-11-01｜2026年三季度初步业绩后情景复核",
+  "high2": 149.17,
   "valuationDate": "2026-11-01",
+  "priceUnit": "USD/ADS",
+  "priceAsOf": "2026-10-30 regular-session close",
+  "priceSource": "Yahoo SKHY actual ADS quote (USD)",
   "valuationHorizon": 6,
   "valuationScenarios": {
     "bear": {
       "price": 126.25626647804346,
       "normalNopatUsd100m": 389.81405421551835,
-      "exitMultiple": 7.046089727607322
+      "exitMultiple": 7.046089727607322,
+      "horizon": 6
     },
     "base": {
       "price": 137.0287668234301,
       "normalNopatUsd100m": 389.81405421551835,
-      "exitMultiple": 11.0
+      "exitMultiple": 11.0,
+      "horizon": 6
     },
     "bull": {
-      "price": 154.72710894357513,
-      "normalNopatUsd100m": 487.2675677693974,
-      "exitMultiple": 13.652882249372608
+      "price": 149.17251026951598,
+      "normalNopatUsd100m": 389.81405421551807,
+      "exitMultiple": 11.0,
+      "horizon": 8
     }
   },
   "valuationReport": "reports/SKHY-20261101.html",
-  "valuationCaveat": "熊档为倍数压力情景，仍假设前三年高利润兑现；H为10—12倍退出敏感带，Z为熊—牛两端，均非保证价格。"
+  "valuationCaveat": "中档第6年、牛档第8年正常化，正常利润与11倍退出相同；熊档为六年路径的倍数压力，仍假设前三年高利润兑现。H为10—12倍敏感带，Z为熊—牛两端。",
+  "valuationHorizonLabel": "中6年 · 牛8年"
 };
 function migrateSkhyAds(s){
   if(s.code !== '000660.KS') return false;
@@ -1401,7 +1405,7 @@ function valuationScenarioHTML(s){
   const values = [['bear','熊'],['base','中'],['bull','牛']]
     .map(([k,label]) => `${label} $${v[k].price.toFixed(2)}`).join(' · ');
   const report = /^reports\/[A-Za-z0-9_-]+\.html$/.test(s.valuationReport || '')
-    ? `<a href="${escapeHtml(s.valuationReport)}" target="_blank" rel="noopener">${escapeHtml(s.valuationHorizon)}年正常化 · 估值过程 ↗</a>` : '';
+    ? `<a href="${escapeHtml(s.valuationReport)}" target="_blank" rel="noopener">${escapeHtml(s.valuationHorizonLabel || (s.valuationHorizon + '年正常化'))} · 估值过程 ↗</a>` : '';
   return `<div class="note" style="font-size:10px;margin-top:5px;line-height:1.7" title="${escapeHtml(s.valuationCaveat)}">
     <span>${values}</span><br>${report}
   </div>`;
