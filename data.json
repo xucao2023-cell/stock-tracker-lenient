@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-10-30T23:58:09.735Z",
+  "updatedAt": "2026-10-31T10:28:08.854Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -392,15 +392,16 @@
     {
       "name": "联合利华",
       "code": "ULVR.L",
-      "low1": 51,
-      "high1": 57,
-      "low2": 45,
-      "high2": 64,
+      "low1": 55,
+      "high1": 59,
+      "low2": 50,
+      "high2": 63,
       "price": 58.6,
       "currency": "€",
-      "note": "2026年中报后估值",
+      "note": "2026-10-31｜2026年三季度经营公告后复核",
       "memo": "26年半年报后的估值",
-      "group": "Trade Republic"
+      "group": "Trade Republic",
+      "valuationDate": "2026-10-31"
     },
     {
       "name": "ASML",
