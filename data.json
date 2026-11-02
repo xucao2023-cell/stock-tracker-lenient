@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-02T17:25:39.746Z",
+  "updatedAt": "2026-11-02T21:38:49.622Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -103,14 +103,50 @@
       "code": "ON.US",
       "price": 73,
       "currency": "$",
-      "note": "2026-10-15｜2026年二季报后重估",
+      "note": "2026-11-03｜2026年三季报后重估",
       "group": "watch_T212",
-      "low1": 60,
-      "high1": 75,
-      "low2": 28.03,
-      "high2": 121.42,
+      "low1": 58.0,
+      "high1": 73.0,
+      "low2": 46.69,
+      "high2": 99.45,
       "memo": "基于2026年Q2估值",
-      "valuationDate": "2026-10-15"
+      "valuationDate": "2026-11-03",
+      "valuationCenter": 65.19,
+      "valuationReport": "reports/ON-20261103.html",
+      "valuationMethod": "2023–2025正常化调整EPS×16–20倍，计入两项在途收购净现值",
+      "valuationScenarios": {
+        "bear": {
+          "price": 46.68570505793725,
+          "eps": 3.83,
+          "exitMultiple": 13.168341670204047,
+          "label": "历史低分位倍数压力"
+        },
+        "base": {
+          "price": 65.19095646105575,
+          "eps": 3.83,
+          "exitMultiple": 18,
+          "label": "正常化盈利主锚"
+        },
+        "bull": {
+          "price": 99.45095646105575,
+          "eps": 5.16,
+          "exitMultiple": 20,
+          "label": "历史高位盈利恢复"
+        }
+      },
+      "valuationStandalone": {
+        "low": 61.28,
+        "high": 76.6,
+        "base": 68.94
+      },
+      "valuationDcf": {
+        "base": 57.117783627027656,
+        "standalone": 60.866827165971905,
+        "wacc": 0.1125,
+        "terminalShare": 0.45273891177335873,
+        "label": "资本成本与长期利润率正常化后的经济FCFF检验"
+      },
+      "valuationCaveat": "H为报告取整后的58–73美元/股合理判断带；Z为已列示熊/牛情景外沿。主锚65.19美元/股，DCF57.12美元/股。Q3完整10-Q中的RPO/采购承诺及两笔收购融资、经济回报尚未全部核验，情景不是股价底线。"
     },
     {
       "name": "Vertiv",
