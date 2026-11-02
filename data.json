@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-02T09:39:42.515Z",
+  "updatedAt": "2026-11-02T14:53:31.803Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -543,14 +543,47 @@
       "code": "ORCL.US",
       "price": 130.67,
       "currency": "$",
-      "note": "2026-10-23｜2027财年一季报后重估",
+      "note": "2026-11-02｜2027财年一季报及新指引后重估",
       "group": "Trading 212",
-      "low1": 175,
-      "high1": 190,
-      "low2": 131.82,
-      "high2": 264.41,
+      "low1": 172.08,
+      "high1": 187.04,
+      "low2": 129.43,
+      "high2": 259.61,
       "memo": "",
-      "valuationDate": "2026-10-23"
+      "valuationDate": "2026-11-02",
+      "valuationCenter": 179.56,
+      "valuationReport": "reports/ORCL-20261102.html",
+      "valuationMethod": "FY2028股东盈利代理×23–25倍PE，按股权成本折现至估值日",
+      "valuationScenarios": {
+        "bear": {
+          "price": 129.43159749983914,
+          "eps": 9.058003480306903,
+          "exitMultiple": 17.3,
+          "horizon": 1.5770020533880904
+        },
+        "base": {
+          "price": 179.5582855489098,
+          "eps": 9.058003480306903,
+          "exitMultiple": 24,
+          "horizon": 1.5770020533880904
+        },
+        "bull": {
+          "price": 259.6113545227987,
+          "eps": 9.058003480306903,
+          "exitMultiple": 34.7,
+          "horizon": 1.5770020533880904
+        }
+      },
+      "valuationDcf": {
+        "base": 133.4925682974469,
+        "beforeFinancing": 133.63014888302533,
+        "stress": 57.34199444164792,
+        "optimistic": 162.47028073123172,
+        "terminalShare": 0.6770340703101223,
+        "wacc": 0.10620538078829521,
+        "label": "最新指引兑现条件下的经济现金流估值"
+      },
+      "valuationCaveat": "H为FY2028共识兑现后的盈利估值；Z为同一盈利的17.3–34.7倍情景外沿。DCF基准133.49美元/股另列。11月2日拟股债融资尚未定价；供应商融资设备投入仍有未验证项，压力档不是股价底线。"
     },
     {
       "name": "Bloom Energy",
