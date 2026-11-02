@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-02T21:38:49.622Z",
+  "updatedAt": "2026-11-02T22:03:22.668Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -89,14 +89,62 @@
       "code": "AAPL.US",
       "price": 301.39,
       "currency": "€",
-      "note": "2026-10-20｜2026财年三季报后重估",
+      "note": "2026-11-03｜2026财年四季报快报后复核",
       "group": "watch_TR",
-      "low1": 240.78,
-      "high1": 257.79,
-      "low2": 205.87,
+      "low1": 239.41,
+      "high1": 256.51,
+      "low2": 205.21,
       "high2": null,
       "memo": "已更新半年报（苹果Q3财报）",
-      "valuationDate": "2026-10-20"
+      "valuationDate": "2026-11-03",
+      "valuationCenter": 247.96,
+      "valuationReport": "reports/AAPL-20261103.html",
+      "valuationMethod": "正常化FY2027盈利×28–30倍历史前瞻PE；DCF独立约束；美元模型换算欧元显示",
+      "valuationCurrency": "EUR",
+      "valuationFx": {
+        "date": "2026-11-02",
+        "base": "EUR",
+        "quote": "USD",
+        "rate": 1.1216,
+        "formula": "EUR/share = USD/share / USD_per_EUR",
+        "source": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml",
+        "crossCheck": "https://api.frankfurter.app/latest?from=EUR&to=USD"
+      },
+      "valuationSourceUSD": {
+        "low1": 268.5210928719723,
+        "high1": 287.7011709342561,
+        "low2": 230.16093674740483,
+        "high2": null,
+        "center": 278.1111319031142,
+        "dcf": 173.6588924384203
+      },
+      "valuationScenarios": {
+        "base": {
+          "price": 247.96,
+          "currency": "EUR",
+          "label": "正常化盈利主锚"
+        },
+        "pressure": {
+          "low": 205.21,
+          "high": 222.31,
+          "currency": "EUR",
+          "multiples": [
+            24,
+            26
+          ],
+          "label": "同一盈利下的单倍数压力，非全面熊档"
+        }
+      },
+      "valuationDcf": {
+        "base": 154.83,
+        "currency": "EUR",
+        "sourceUSD": 173.6588924384203,
+        "wacc": 0.095,
+        "terminalGrowth": 0.03,
+        "terminalShare": 0.5546437818801686,
+        "label": "独立现金流约束；不与PE区间平均"
+      },
+      "valuationCaveat": "FY2026Q4未经审计三表快报初评；新10-K、正式指引及财报后共识未全部验证。H为既有美元PE主锚的欧元换算；Z下沿为单倍数压力，严格牛档未验证，上沿留空。个人备注与现价保留。"
     },
     {
       "name": "onsemi",
