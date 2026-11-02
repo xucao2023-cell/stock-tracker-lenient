@@ -935,39 +935,39 @@ const SKHY_ADS_MIGRATION = {
   "code": "SKHY.US",
   "price": 149.21,
   "currency": "$",
-  "note": "2026-11-01｜2026年三季度初步业绩后情景复核",
+  "note": "2026-11-02｜2026年三季度初步业绩后情景复核",
   "low1": 134.3,
   "high1": 139.75,
-  "low2": 126.26,
-  "high2": 149.17,
-  "valuationDate": "2026-11-01",
+  "low2": 119.71,
+  "high2": 151.33,
+  "valuationDate": "2026-11-02",
   "priceUnit": "USD/ADS",
   "priceAsOf": "2026-10-30 regular-session close",
   "priceSource": "Yahoo SKHY actual ADS quote (USD)",
   "valuationHorizon": 6,
   "valuationScenarios": {
     "bear": {
-      "price": 126.25626647804346,
-      "normalNopatUsd100m": 389.81405421551835,
-      "exitMultiple": 7.046089727607322,
-      "horizon": 6
+      "price": 119.70803895973191,
+      "normalNopatUsd100m": 389.81405421551784,
+      "exitMultiple": 10.0,
+      "horizon": 4
     },
     "base": {
-      "price": 137.0287668234301,
-      "normalNopatUsd100m": 389.81405421551835,
+      "price": 137.02876682343003,
+      "normalNopatUsd100m": 389.81405421551784,
       "exitMultiple": 11.0,
       "horizon": 6
     },
     "bull": {
-      "price": 149.17251026951598,
-      "normalNopatUsd100m": 389.81405421551807,
-      "exitMultiple": 11.0,
+      "price": 151.32521597723024,
+      "normalNopatUsd100m": 389.81405421551784,
+      "exitMultiple": 12.0,
       "horizon": 8
     }
   },
-  "valuationReport": "reports/SKHY-20261101.html",
-  "valuationCaveat": "中档第6年、牛档第8年正常化，正常利润与11倍退出相同；熊档为六年路径的倍数压力，仍假设前三年高利润兑现。H为10—12倍敏感带，Z为熊—牛两端。",
-  "valuationHorizonLabel": "中6年 · 牛8年"
+  "valuationReport": "reports/SKHY-20261102.html",
+  "valuationCaveat": "H为六年路径、12.5%折现率下的10—12倍核心带；Z为四年10倍至八年12倍的情景外沿。四年路径仍假设前三年高利润兑现，区间不构成价格保证。",
+  "valuationHorizonLabel": "H：6年10—12倍；Z：4年10倍—8年12倍"
 };
 function migrateSkhyAds(s){
   if(s.code !== '000660.KS') return false;
