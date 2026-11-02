@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-02T06:49:14.245Z",
+  "updatedAt": "2026-11-02T09:39:42.515Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -282,16 +282,39 @@
     {
       "name": "公牛集团",
       "code": "603195.SH",
-      "low1": 36,
-      "high1": 44,
-      "low2": 32.2,
-      "high2": 50.7,
+      "low1": 32.0,
+      "high1": 41.0,
+      "low2": 29.89,
+      "high2": 46.9,
       "price": 37,
       "currency": "¥",
-      "note": "2026-10-13｜2026年中报后重估",
+      "note": "2026-11-02｜2026年三季报后重估",
       "memo": "26年半年报后",
       "group": "A股",
-      "valuationDate": "2026-10-13"
+      "valuationDate": "2026-11-02",
+      "valuationReport": "reports/603195-20261102.html",
+      "valuationCenter": 38.0,
+      "valuationScenarios": {
+        "bear": {
+          "price": 35.441583013181294,
+          "label": "历史约10%分位PE情景"
+        },
+        "base": {
+          "price": 38.0,
+          "label": "判断中枢"
+        },
+        "bull": {
+          "price": 46.90445400940972,
+          "label": "历史峰值盈利恢复情景"
+        }
+      },
+      "valuationModelPEBase": 38.43063218296766,
+      "valuationStress": {
+        "price": 29.89049169786374,
+        "pe": 14,
+        "label": "报告已列示的14倍额外压力测试，作为Z下沿"
+      },
+      "valuationCaveat": "H为合理判断带；Z下沿采用报告已列的14倍压力测试29.89元/股，上沿为恢复情景46.90元/股。历史分位熊档35.44元/股另列，不是价格底线。艾伏对价及并表利润未核实。"
     },
     {
       "name": "格力电器",
