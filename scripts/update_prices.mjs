@@ -20,7 +20,7 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const DATA_PATH = new URL('../data.json', import.meta.url);
 const TENCENT_URL = 'https://qt.gtimg.cn/q=';
 const YAHOO_URL = (sym) => `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=5d`;
-const YAHOO_UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
+const YAHOO_UA = 'Mozilla/5.0';
 const YAHOO_THROTTLE_MS = 1500;
 const SANITY_THRESHOLD = 0.5; // skip price if |new-old|/old > 50%
 
@@ -69,8 +69,8 @@ function classifyMarket(code) {
   // Tencent covers: A-share (6-digit), HK (5-digit .HK), US (letters or .US).
   // Yahoo covers: everything else (.DE, .PA, etc.).
   const c = code.trim();
-  // SKHY is the USD-quoted ADS. Never substitute KRW ordinary-share parity.
-  if (c === 'SKHY.US' || c === 'SKHY') return 'yahoo';
+  // Validate the actual USD listing for SKHY ADS and MRVL before conversion.
+  if (['SKHY.US', 'SKHY', 'MRVL.US', 'MRVL'].includes(c)) return 'yahoo';
   const isA = /^\d{6}(\.SH|\.SZ)?$/.test(c);
   const isHK = /^\d{5}\.HK$/.test(c);
   const isUS = /^[A-Za-z.]+(\.US)?$/.test(c) && !/\.(DE|PA|L|AS|NL|IT|ES|CH)$/i.test(c);
@@ -110,7 +110,7 @@ async function getFxRate(from, to) {
   const j = await res.json();
   const rate = j?.rates?.[to];
   if (!Number.isFinite(rate)) throw new Error(`Frankfurter no ${to} rate in ${from}→${to} response`);
-  fxCache.set(key, { value: rate, fetchedAt: Date.now() });
+  fxCache.set(key, { value: rate, date: j.date, fetchedAt: Date.now() });
   return rate;
 }
 
@@ -274,11 +274,20 @@ async function main() {
     } else {
       const got = yahooPrices[s.code];
       if (got) {
-        if ((s.code === 'SKHY.US' || s.code === 'SKHY') &&
-            (got.currency !== 'USD' || got.symbol !== 'SKHY')) {
-          report.push(`${s.code} SKIP (expected actual SKHY ADS quote in USD)`);
+        if (['SKHY.US', 'SKHY', 'MRVL.US', 'MRVL'].includes(s.code) &&
+            (got.currency !== 'USD' || got.symbol !== toYahooCode(s.code))) {
+          report.push(`${s.code} SKIP (expected actual ${toYahooCode(s.code)} quote in USD)`);
           failed++;
           continue;
+        }
+        if (s.code === 'MRVL.US' || s.code === 'MRVL') {
+          const previousTime = Date.parse(s.priceAsOf || '');
+          if (!Number.isFinite(got.marketTime) ||
+              (Number.isFinite(previousTime) && got.marketTime * 1000 < previousTime)) {
+            report.push(`${s.code} SKIP (missing or older quote timestamp)`);
+            skipped++;
+            continue;
+          }
         }
         newPrice = got.price;
         src = 'yahoo';
@@ -320,11 +329,20 @@ async function main() {
     );
     if (!DRY_RUN) {
       s.price = parsedFormatted;
-      if (s.code === 'SKHY.US' || s.code === 'SKHY') {
+      if (['SKHY.US', 'SKHY', 'MRVL.US', 'MRVL'].includes(s.code)) {
         const quote = yahooPrices[s.code];
-        s.priceSource = 'Yahoo SKHY actual ADS quote (USD)';
+        const pair = needsFxConversion(s);
+        const fx = pair && fxCache.get(`${pair.from}->${pair.to}`);
+        s.priceSource = `Yahoo ${quote.symbol} actual ${quote.symbol === 'SKHY' ? 'ADS ' : ''}quote (USD)${pair ? '; Frankfurter/ECB conversion to EUR' : ''}`;
         if (Number.isFinite(quote?.marketTime)) {
           s.priceAsOf = new Date(quote.marketTime * 1000).toISOString();
+        }
+        if (s.code === 'MRVL.US' || s.code === 'MRVL') {
+          s.priceNative = {symbol: quote.symbol, currency: quote.currency, price: quote.price};
+          if (pair && fx) {
+            s.priceFx = {from: pair.from, to: pair.to, rate: fx.value, date: fx.date,
+              source: FRANKFURTER_URL(pair.from, pair.to)};
+          }
         }
       }
     }

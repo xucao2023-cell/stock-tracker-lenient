@@ -561,21 +561,21 @@
   "websiteMapping": {
     "name": "Marvell",
     "code": "MRVL.US",
-    "price": 152.83,
+    "price": 153.32,
     "currency": "€",
     "note": "2026-11-03｜2027财年三季度营收初步披露及并购后复核",
     "group": "watch_TR",
-    "low1": null,
-    "high1": null,
+    "low1": 108.15,
+    "high1": 127.9,
     "low2": 84.61,
     "high2": 174.73,
-    "memo": "2026-11-03｜FY2027 Q3营收初步披露及Lumentum交易后研究\n\n所有估值为1股Marvell普通股的欧元等值，汇率为ECB 2026-11-02：1欧元=1.1216美元。\n独立经营基准：122.67美元/股 ÷ 1.1216 = 109.37欧元/股。\n交易后静态备考基准：132.38美元/股 ÷ 1.1216 = 118.03欧元/股。尚未交割，不是2028年目标价。\n\n计算：FY2028正常化规模代理200亿美元 × (调整营业利润率38%−SBC率8%) × (1−税率18%) − 税后净利息1亿美元 = 经济净利48.20亿美元。除以9.436亿股，EPS为5.1081美元/股。净利×24倍后加入投资、远期合同资产、扣除或有现金净调整0.759亿美元，再除股数，得到独立基准。合并情景加入LITE权益及折现后的协同净值，除以13.981亿股，得到交易后基准。\n\nH留空、状态待确认：现有研究只给两个经营状态的条件基准，尚无同口径且充分验证的H区间；没有把两种状态拼成合理区间。\nZ：84.61—174.73欧元/股，来自交易后18倍压力与28倍成长兑现情景，非已核实历史熊/牛分位。\nDCF独立检验：独立80.74欧元/股、交易后72.48欧元/股。与盈利法分歧显著，结果低至中低置信。\n\n收购消息后为何大跌：LITE每股固定换4.5股MRVL；MRVL股价下降，换股对价同步缩水。公告原MRVL股东约占67%，按约数推导总股数增加49.3%，需足够新增利润抵偿，但增发本身并不必然造成价值损失。整合、制造扩产及2028年上半年交割的等待，会影响投资者判断。\n美东11月2日15:24历史盘中快照（非收盘）：MRVL 172.34美元/股，跌12.25%；LITE跌17.65%；SOXX跌2.72%。LITE换股价值4.5×172.34=775.53美元/股，实际692.31美元/股，折价由4.9%扩大至10.7%。折价不是交易失败概率；当日跌幅不证明任一估值正确。\n\n完整过程、检查缺口与原文：\nhttps://xucao2023-cell.github.io/stock-tracker-lenient/reports/MRVL-20261103.html",
+    "memo": "2026-11-03｜FY2027 Q3营收初步披露及Lumentum交易后研究\n\n所有估值为1股Marvell普通股的欧元等值，汇率为ECB 2026-11-02：1欧元=1.1216美元。\n独立经营基准：122.67美元/股 ÷ 1.1216 = 109.37欧元/股。\n交易后静态备考基准：132.38美元/股 ÷ 1.1216 = 118.03欧元/股。尚未交割，不是2028年目标价。\n\n计算：FY2028正常化规模代理200亿美元 × (调整营业利润率38%−SBC率8%) × (1−税率18%) − 税后净利息1亿美元 = 经济净利48.20亿美元。除以9.436亿股，EPS为5.1081美元/股。净利×24倍后加入投资、远期合同资产、扣除或有现金净调整0.759亿美元，再除股数，得到独立基准。合并情景加入LITE权益及折现后的协同净值，除以13.981亿股，得到交易后基准。\n\nH：108.15—127.90欧元/股。沿用同一正常化盈利和并购假设，采用22—26倍经济PE；24倍中枢118.03欧元/股不变。这是低至中低置信的研究判断带，完整历史分位未验证。\nZ：84.61—174.73欧元/股，来自交易后18倍压力与28倍成长兑现情景，非已核实历史熊/牛分位。\nDCF独立检验：独立80.74欧元/股、交易后72.48欧元/股。与盈利法分歧显著，结果低至中低置信。\n\n收购消息后为何大跌：LITE每股固定换4.5股MRVL；MRVL股价下降，换股对价同步缩水。公告原MRVL股东约占67%，按约数推导总股数增加49.3%，需足够新增利润抵偿，但增发本身并不必然造成价值损失。整合、制造扩产及2028年上半年交割的等待，会影响投资者判断。\n美东11月2日15:24历史盘中快照（非收盘）：MRVL 172.34美元/股，跌12.25%；LITE跌17.65%；SOXX跌2.72%。LITE换股价值4.5×172.34=775.53美元/股，实际692.31美元/股，折价由4.9%扩大至10.7%。折价不是交易失败概率；当日跌幅不证明任一估值正确。\n\n完整过程、检查缺口与原文：\nhttps://xucao2023-cell.github.io/stock-tracker-lenient/reports/MRVL-20261103.html",
     "valuationDate": "2026-11-03",
-    "valuationStatus": "pending",
+    "valuationStatus": "conditional",
     "valuationCenter": 118.03,
     "valuationCurrency": "EUR",
     "valuationReport": "reports/MRVL-20261103.html",
-    "valuationMethod": "沿用既有正常化经济盈利×倍数与独立DCF；未建立充分验证的H区间",
+    "valuationMethod": "正常化经济盈利×22–26倍H核心带；原18倍压力/28倍成长Z；交易后条件口径，DCF独立检验",
     "valuationFx": {
       "date": "2026-11-02",
       "base": "EUR",
@@ -587,8 +587,8 @@
     "valuationSourceUSD": {
       "standaloneBase": 122.67475625264944,
       "conditionalCombinedBase": 132.38180203165626,
-      "low1": null,
-      "high1": null,
+      "low1": 121.30637841337341,
+      "high1": 143.45722564993915,
       "low2": 94.89306937400998,
       "high2": 195.9783946727695,
       "dcfStandalone": 90.56107191552668,
@@ -617,6 +617,18 @@
         "currency": "EUR",
         "exitMultiple": 28,
         "label": "交易后成长兑现上沿，非验证历史牛档"
+      },
+      "coreLow": {
+        "price": 108.15,
+        "currency": "EUR",
+        "exitMultiple": 22,
+        "label": "原正常化盈利下的H下沿"
+      },
+      "coreHigh": {
+        "price": 127.9,
+        "currency": "EUR",
+        "exitMultiple": 26,
+        "label": "原正常化盈利下的H上沿"
       }
     },
     "valuationDcf": {
@@ -628,7 +640,7 @@
       "standaloneTerminalShare": 0.48401624472999166,
       "combinedTerminalShare": 0.4883385306752312
     },
-    "valuationCaveat": "低至中低置信条件研究。H未提供，不作自动高低估判断。Z仅沿用压力/成长情景。缺完整Q3三表、全期限订单、历史前瞻分位、S-4及完整合并桥；盈利法与DCF分歧未消除。",
+    "valuationCaveat": "H为原正常化盈利下22–26倍判断带，Z保留原压力/成长外沿；均为交易后条件口径。低至中低置信，完整Q3、历史分位、S-4及合并桥仍缺，DCF分歧未消除。",
     "initialQuote": {
       "nativePriceUSD": 171.41,
       "priceEUR": 152.83,
@@ -662,6 +674,33 @@
       "spreadPercent": 10.73072608409733,
       "approxShareIncreasePercent": 49.25373134328357,
       "causality": "Stock-for-stock transmission is arithmetic; investor motives are interpretations. The spread is not a failure probability."
+    },
+    "valuationConfidence": "low-to-medium-low",
+    "priceAsOf": "2026-11-03T14:38:12.000Z",
+    "priceSource": "Yahoo MRVL actual quote (USD); Frankfurter/ECB conversion to EUR",
+    "priceNative": {
+      "symbol": "MRVL",
+      "currency": "USD",
+      "price": 171.96
+    },
+    "priceFx": {
+      "from": "USD",
+      "to": "EUR",
+      "rate": 0.89158,
+      "date": "2026-11-02",
+      "source": "https://api.frankfurter.app/latest?from=USD&to=EUR"
+    },
+    "valuationH": {
+      "low": 108.15,
+      "base": 118.03,
+      "high": 127.9,
+      "multiples": [
+        22,
+        24,
+        26
+      ],
+      "conditionalOnDeal": true,
+      "label": "正常化盈利不变的研究判断带，非历史分位验证区间"
     }
   },
   "reactionCalculations": {
@@ -689,5 +728,87 @@
     "spreadPercent": 10.73072608409733,
     "approxShareIncreasePercent": 49.25373134328357,
     "causality": "Stock-for-stock transmission is arithmetic; investor motives are interpretations. The spread is not a failure probability."
+  },
+  "rangeSupplement": {
+    "asOf": "2026-11-03",
+    "type": "Supplementary H-band multiple sensitivity",
+    "originalOperatingInputsUnchanged": true,
+    "originalBaseUnchanged": true,
+    "inputSources": {
+      "model": "extracted/revaluation_20261103/valuation_results.json",
+      "report": "Marvell_初步业绩及并购后重估_20261103.md"
+    },
+    "sourceClassification": {
+      "companyFacts": "Original official Q2 statements and Nov 2 merger/Q3 preliminary-revenue disclosure.",
+      "companyTargets": "FY2028 revenue USD20bn is a management target, not realised normal earnings.",
+      "consensus": "Original dated financial forecast is retained only as context, not a price target.",
+      "researchAssumptions": "Normalised margins, SBC, tax, 22/24/26 economic PE, 50% synergy, costs and timing."
+    },
+    "inputUnits": "USD billions and shares billions; bridge output also shown in USD100m",
+    "inputs": {
+      "mrvlEconomicNI": 4.82,
+      "liteEconomicNI": 2.5912,
+      "netNonoperatingAdjustment": 0.0759,
+      "afterTaxSynergy": 0.41,
+      "integrationCost": 1.0,
+      "ke": 0.15320119554502742,
+      "closeYears": 1.5,
+      "shares": 1.3981
+    },
+    "H": {
+      "low": {
+        "multiple": 22,
+        "mrvlEquityUSD100m": 1061.159,
+        "liteEquityUSD100m": 570.0640000000001,
+        "synergyNetPVUSD100m": 64.76147659737323,
+        "combinedEquityUSD100m": 1695.9844765973735,
+        "USD_per_share": 121.30637841337341,
+        "EUR_per_share": 108.1547596410248,
+        "equivalentMrvlAdjustedPE": 17.292889758643184
+      },
+      "base": {
+        "multiple": 24,
+        "mrvlEquityUSD100m": 1157.5590000000002,
+        "liteEquityUSD100m": 621.888,
+        "synergyNetPVUSD100m": 71.38297420458596,
+        "combinedEquityUSD100m": 1850.829974204586,
+        "USD_per_share": 132.38180203165626,
+        "EUR_per_share": 118.02942406531407,
+        "equivalentMrvlAdjustedPE": 18.864970645792567
+      },
+      "high": {
+        "multiple": 26,
+        "mrvlEquityUSD100m": 1253.959,
+        "liteEquityUSD100m": 673.712,
+        "synergyNetPVUSD100m": 78.00447181179868,
+        "combinedEquityUSD100m": 2005.6754718117988,
+        "USD_per_share": 143.45722564993915,
+        "EUR_per_share": 127.90408848960338,
+        "equivalentMrvlAdjustedPE": 20.437051532941947
+      }
+    },
+    "Z": {
+      "low": {
+        "USD_per_share": 94.89306937400998,
+        "EUR_per_share": 84.6050903833898
+      },
+      "high": {
+        "USD_per_share": 195.9783946727695,
+        "EUR_per_share": 174.73109368114257
+      }
+    },
+    "fx": {
+      "USD_per_EUR": 1.1216,
+      "date": "2026-11-02",
+      "source": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
+    },
+    "methodReason": "22-26 is a judgment range around retained 24x core: approximately 17.29-20.44x original MRVL adjusted earnings. The original comparable snapshot provides context, not a verified historical percentile. H does not assume accelerated peak margins.",
+    "confidence": "Low to medium-low; original checklist gaps and DCF divergence retained.",
+    "unchangedDCF": {
+      "standaloneUSD": 90.56107191552668,
+      "combinedUSD": 81.29272994612406,
+      "wacc": 0.15,
+      "terminalShare": 0.4883385306752312
+    }
   }
 }
