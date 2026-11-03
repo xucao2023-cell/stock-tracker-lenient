@@ -1,6 +1,6 @@
 
 // scripts/update_prices.mjs
-// Daily price updater for xucao2023-cell/stock-tracker.
+// Daily price updater for xucao2023-cell/stock-tracker-lenient.
 //
 // Sources:
 //   - Tencent qt.gtimg.cn  → batch fetch A-share / HK / US (one HTTP call covers 20+ symbols)
@@ -15,13 +15,12 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import iconv from 'iconv-lite';
-import { fetchBmwQuote } from './bmw_tradegate_quote.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const DATA_PATH = new URL('../data.json', import.meta.url);
 const TENCENT_URL = 'https://qt.gtimg.cn/q=';
 const YAHOO_URL = (sym) => `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=5d`;
-const YAHOO_UA = 'Mozilla/5.0';
+const YAHOO_UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 const YAHOO_THROTTLE_MS = 1500;
 const SANITY_THRESHOLD = 0.5; // skip price if |new-old|/old > 50%
 
@@ -70,8 +69,6 @@ function classifyMarket(code) {
   // Tencent covers: A-share (6-digit), HK (5-digit .HK), US (letters or .US).
   // Yahoo covers: everything else (.DE, .PA, etc.).
   const c = code.trim();
-  // Validate the actual USD listing for SKHY ADS and MRVL before conversion.
-  if (['SKHY.US', 'SKHY', 'MRVL.US', 'MRVL'].includes(c)) return 'yahoo';
   const isA = /^\d{6}(\.SH|\.SZ)?$/.test(c);
   const isHK = /^\d{5}\.HK$/.test(c);
   const isUS = /^[A-Za-z.]+(\.US)?$/.test(c) && !/\.(DE|PA|L|AS|NL|IT|ES|CH)$/i.test(c);
@@ -111,24 +108,24 @@ async function getFxRate(from, to) {
   const j = await res.json();
   const rate = j?.rates?.[to];
   if (!Number.isFinite(rate)) throw new Error(`Frankfurter no ${to} rate in ${from}→${to} response`);
-  fxCache.set(key, { value: rate, date: j.date, fetchedAt: Date.now() });
+  fxCache.set(key, { value: rate, fetchedAt: Date.now() });
   return rate;
 }
 
-// Convert upstream quote currency to the stock's configured display currency.
+// A stock needs FX conversion when its `currency` field is EUR but the
+// upstream quote source returns in a different currency. Currently:
 //   - LSE-listed (.L) codes: Yahoo returns GBP → EUR
 //   - HK codes (.HK) in Trade Republic: Tencent returns HKD → EUR
 //   - US codes (.US) in Trade Republic: Tencent returns USD → EUR
-//   - Korean ordinary shares (.KS) displayed in USD: KRW → USD
+// Detected by group/currency/code combination; source-currency decided below.
 function needsFxConversion(stock) {
-  if (stock.code.endsWith('.KS') && stock.currency === '$') return { from: 'KRW', to: 'USD' };
   if (stock.currency !== '€') return null; // not targeted to EUR
   // Groups that should report in EUR (regardless of native quote currency)
   const EUR_TARGET_GROUPS = new Set(['Trade Republic', 'watch_TR']);
   if (!EUR_TARGET_GROUPS.has(stock.group)) return null;
-  if (stock.code.endsWith('.L')) return { from: 'GBP', to: 'EUR' };
-  if (stock.code.endsWith('.HK')) return { from: 'HKD', to: 'EUR' };
-  if (stock.code.endsWith('.US')) return { from: 'USD', to: 'EUR' };
+  if (stock.code.endsWith('.L')) return 'GBP';   // LSE = GBP via Yahoo
+  if (stock.code.endsWith('.HK')) return 'HKD';  // HKEX = HKD via Tencent
+  if (stock.code.endsWith('.US')) return 'USD';  // US = USD via Tencent
   return null; // already EUR (e.g. .DE, .PA, .AS codes already trade in EUR)
 }
 
@@ -173,7 +170,7 @@ async function fetchYahooOne(symbol, attempt = 0) {
   const prev  = r?.meta?.chartPreviousClose;
   const currency = r?.meta?.currency;
   if (!Number.isFinite(price)) throw new Error(`Yahoo ${symbol} no price in response`);
-  return { price, prev, currency, symbol: r.meta.symbol, marketTime: r.meta.regularMarketTime };
+  return { price, prev, currency };
 }
 
 // ---------- main ----------
@@ -220,30 +217,33 @@ async function main() {
     const { code } = yahooSymbols[i];
     if (i > 0) await sleep(YAHOO_THROTTLE_MS);
     try {
-      yahooPrices[code] = code === 'BMW.DE' ? await fetchBmwQuote() : await fetchYahooOne(code);
+      yahooPrices[code] = await fetchYahooOne(code);
     } catch (e) {
       console.warn(`[yahoo] ${code} failed: ${e.message}`);
     }
   }
 
   // FX: pre-fetch rates for any stock needing conversion.
-  const fxStocks = stocks.map((s) => ({ stock: s, pair: needsFxConversion(s) })).filter((x) => x.pair);
-  const fxRates = new Map(); // `${from}->${to}` → conversion rate
+  // needsFxConversion() returns the source currency (e.g. 'GBP', 'HKD', 'USD')
+  // or null if the stock is already priced in EUR.
+  const fxStocks = stocks.map((s) => ({ stock: s, src: needsFxConversion(s) })).filter((x) => x.src);
+  const fxRates = new Map(); // src currency → rate to EUR
   if (fxStocks.length > 0) {
-    const pairs = new Map(fxStocks.map(({pair}) => [`${pair.from}->${pair.to}`, pair]));
-    for (const [key, {from, to}] of pairs) {
+    // Dedup by source currency
+    const uniqueSrc = [...new Set(fxStocks.map((x) => x.src))];
+    for (const src of uniqueSrc) {
       try {
-        const rate = await getFxRate(from, to);
-        fxRates.set(key, rate);
+        const rate = await getFxRate(src, 'EUR');
+        fxRates.set(src, rate);
       } catch (e) {
-        console.warn(`[fx] FX fetch failed for ${from}→${to}: ${e.message}`);
+        console.warn(`[fx] FX fetch failed for ${src}→EUR: ${e.message}`);
       }
     }
-    for (const [key, rate] of fxRates) {
-      const codes = fxStocks.filter(({pair}) => `${pair.from}->${pair.to}` === key).map((x) => x.stock.code).join(', ');
-      console.log(`[fx] ${key} = ${rate} (will convert: ${codes})`);
+    for (const [src, rate] of fxRates) {
+      const codes = fxStocks.filter((x) => x.src === src).map((x) => x.stock.code).join(', ');
+      console.log(`[fx] ${src}→EUR = ${rate} (will convert: ${codes})`);
     }
-    const missing = fxStocks.filter(({pair}) => !fxRates.has(`${pair.from}->${pair.to}`)).map((x) => x.stock.code);
+    const missing = fxStocks.filter((x) => !fxRates.has(x.src)).map((x) => x.stock.code);
     if (missing.length > 0) console.warn(`[fx] SKIP (no FX): ${missing.join(', ')}`);
   }
 
@@ -264,9 +264,8 @@ async function main() {
         // FX: Tencent reports in source currency (HKD for .HK, USD for .US,
         // CNY for .SH/.SZ, etc.). For TR group stocks targeting EUR, convert.
         const fxSrc = needsFxConversion(s);
-        const fxKey = fxSrc && `${fxSrc.from}->${fxSrc.to}`;
-        if (fxSrc && fxRates.has(fxKey)) {
-          newPrice = newPrice * fxRates.get(fxKey);
+        if (fxSrc && fxRates.has(fxSrc)) {
+          newPrice = newPrice * fxRates.get(fxSrc);
           src = 'tencent+fx';
         } else if (fxSrc) {
           newPrice = null; // FX unavailable → SKIP
@@ -275,39 +274,13 @@ async function main() {
     } else {
       const got = yahooPrices[s.code];
       if (got) {
-        if (s.code === 'BMW.DE') {
-          const previousTime = Date.parse(s.priceAsOf || '');
-          if (got.symbol !== 'BMW.DE' || got.currency !== 'EUR' || got.isin !== 'DE0005190003' ||
-              s.currency !== '€' || !Number.isFinite(got.marketTime) ||
-              (Number.isFinite(previousTime) && got.marketTime * 1000 < previousTime)) {
-            report.push('BMW.DE SKIP (wrong security/currency or older quote-page timestamp)');
-            skipped++;
-            continue;
-          }
-        }
-        if (['SKHY.US', 'SKHY', 'MRVL.US', 'MRVL'].includes(s.code) &&
-            (got.currency !== 'USD' || got.symbol !== toYahooCode(s.code))) {
-          report.push(`${s.code} SKIP (expected actual ${toYahooCode(s.code)} quote in USD)`);
-          failed++;
-          continue;
-        }
-        if (s.code === 'MRVL.US' || s.code === 'MRVL') {
-          const previousTime = Date.parse(s.priceAsOf || '');
-          if (!Number.isFinite(got.marketTime) ||
-              (Number.isFinite(previousTime) && got.marketTime * 1000 < previousTime)) {
-            report.push(`${s.code} SKIP (missing or older quote timestamp)`);
-            skipped++;
-            continue;
-          }
-        }
         newPrice = got.price;
-        src = s.code === 'BMW.DE' ? 'Tradegate BSX EUR ordinary share' : 'yahoo';
+        src = 'yahoo';
         // FX: Yahoo reports in source currency (GBP for .L, EUR for .DE/.PA/.AS).
         // For TR group .L stocks targeting EUR, convert.
         const fxSrc = needsFxConversion(s);
-        const fxKey = fxSrc && `${fxSrc.from}->${fxSrc.to}`;
-        if (fxSrc && fxRates.has(fxKey)) {
-          newPrice = newPrice * fxRates.get(fxKey);
+        if (fxSrc && fxRates.has(fxSrc)) {
+          newPrice = newPrice * fxRates.get(fxSrc);
           src = 'yahoo+fx';
         } else if (fxSrc) {
           newPrice = null; // FX unavailable → SKIP
@@ -333,39 +306,13 @@ async function main() {
       }
     }
 
-    const formatted = s.code === 'BMW.DE' ? String(Math.round(newPrice * 100) / 100) : formatPriceLikeOriginal(newPrice, oldPrice);
-    const parsedFormatted = s.code === 'BMW.DE' ? Number(formatted) : (isInt(oldPrice) ? parseInt(formatted, 10) : parseFloat(formatted));
+    const formatted = formatPriceLikeOriginal(newPrice, oldPrice);
+    const parsedFormatted = isInt(oldPrice) ? parseInt(formatted, 10) : parseFloat(formatted);
     report.push(
       `${s.code.padEnd(10)} ${s.name.padEnd(10)} ${String(oldPrice).padEnd(10)} → ${formatted.padEnd(10)} (${src})`
     );
     if (!DRY_RUN) {
       s.price = parsedFormatted;
-      if (s.code === 'BMW.DE') {
-        const q = yahooPrices[s.code];
-        s.priceSource = q.source;
-        s.priceSourceUrl = q.sourceUrl;
-        s.priceAsOf = new Date(q.marketTime * 1000).toISOString();
-        s.priceTimestampType = q.timestampType;
-        s.priceObservedAt = new Date().toISOString();
-        s.priceNative = {symbol:q.symbol, isin:q.isin, currency:q.currency, price:q.price};
-        s.priceFx = {from:'EUR', to:'EUR', rate:1, date:null, source:'Same currency; no conversion'};
-      }
-      if (['SKHY.US', 'SKHY', 'MRVL.US', 'MRVL'].includes(s.code)) {
-        const quote = yahooPrices[s.code];
-        const pair = needsFxConversion(s);
-        const fx = pair && fxCache.get(`${pair.from}->${pair.to}`);
-        s.priceSource = `Yahoo ${quote.symbol} actual ${quote.symbol === 'SKHY' ? 'ADS ' : ''}quote (USD)${pair ? '; Frankfurter/ECB conversion to EUR' : ''}`;
-        if (Number.isFinite(quote?.marketTime)) {
-          s.priceAsOf = new Date(quote.marketTime * 1000).toISOString();
-        }
-        if (s.code === 'MRVL.US' || s.code === 'MRVL') {
-          s.priceNative = {symbol: quote.symbol, currency: quote.currency, price: quote.price};
-          if (pair && fx) {
-            s.priceFx = {from: pair.from, to: pair.to, rate: fx.value, date: fx.date,
-              source: FRANKFURTER_URL(pair.from, pair.to)};
-          }
-        }
-      }
     }
     updated++;
   }
