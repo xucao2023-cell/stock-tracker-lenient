@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-03T16:34:45.362Z",
+  "updatedAt": "2026-11-03T20:05:44.767Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -45,16 +45,71 @@
     {
       "name": "BMW",
       "code": "BMW.DE",
-      "price": 58,
+      "price": 56.6,
       "currency": "€",
-      "note": "2026-10-09｜2026年中报后估值复核",
+      "note": "2026-11-04｜2026年中报及11月盈利预警复核",
       "group": "Trade Republic",
-      "low1": 55,
-      "high1": 67,
-      "low2": 34,
-      "high2": 99,
+      "low1": 54.24,
+      "high1": 62.94,
+      "low2": 38.71,
+      "high2": 87.77,
       "memo": "基于26Q2财报后估值",
-      "valuationDate": "2026-10-09"
+      "valuationDate": "2026-11-04",
+      "valuationCenter": 58.59,
+      "valuationCurrency": "EUR",
+      "valuationStatus": "conditional",
+      "valuationConfidence": "low-to-medium-low",
+      "valuationReport": "reports/BMW-20261104.html",
+      "valuationMethod": "2026–2030自建周期平均归母盈利×6.5–7.5倍；扣条件现金成本；Z为倍数压力/恢复情景，退出法复核",
+      "valuationH": {
+        "low": 54.24,
+        "base": 58.59,
+        "high": 62.94,
+        "multiples": [
+          6.5,
+          7,
+          7.5
+        ]
+      },
+      "valuationScenarios": {
+        "base": {
+          "price": 58.59,
+          "normalisedParentEURm": 5124.42,
+          "exitMultiple": 7,
+          "label": "条件正常化盈利主锚"
+        },
+        "pressure": {
+          "price": 38.71,
+          "normalisedParentEURm": 5124.42,
+          "exitMultiple": 4.714437932871603,
+          "label": "同盈利的年末低PE快照压力，非验证分位"
+        },
+        "growth": {
+          "price": 87.77,
+          "normalisedParentEURm": 6773.564,
+          "exitMultiple": 7.833473507148864,
+          "label": "原Bull五年平均盈利×年末高PE快照，非验证分位"
+        }
+      },
+      "valuationCaveat": "低至中低置信：22亿欧元费用代理按100%付现、30%税盾和假设日期折现；裁员增量节约未重复加。历史连续分位、完整Q3与现金拆分未验证。",
+      "priceAsOf": "2026-11-03T20:05:44.000Z",
+      "priceObservedAt": "2026-11-03T20:05:44.767Z",
+      "priceTimestampType": "quote-page-refresh; last-trade timestamp not separately supplied",
+      "priceSource": "Tradegate BSX",
+      "priceSourceUrl": "https://www.tradegatebsx.com/orderbuch.php?isin=DE0005190003",
+      "priceNative": {
+        "symbol": "BMW.DE",
+        "isin": "DE0005190003",
+        "currency": "EUR",
+        "price": 56.6
+      },
+      "priceFx": {
+        "from": "EUR",
+        "to": "EUR",
+        "rate": 1,
+        "date": null,
+        "source": "Same currency; no conversion"
+      }
     },
     {
       "name": "Airbus",

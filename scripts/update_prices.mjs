@@ -15,6 +15,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import iconv from 'iconv-lite';
+import { fetchBmwQuote } from './bmw_tradegate_quote.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const DATA_PATH = new URL('../data.json', import.meta.url);
@@ -219,7 +220,7 @@ async function main() {
     const { code } = yahooSymbols[i];
     if (i > 0) await sleep(YAHOO_THROTTLE_MS);
     try {
-      yahooPrices[code] = await fetchYahooOne(code);
+      yahooPrices[code] = code === 'BMW.DE' ? await fetchBmwQuote() : await fetchYahooOne(code);
     } catch (e) {
       console.warn(`[yahoo] ${code} failed: ${e.message}`);
     }
@@ -274,6 +275,16 @@ async function main() {
     } else {
       const got = yahooPrices[s.code];
       if (got) {
+        if (s.code === 'BMW.DE') {
+          const previousTime = Date.parse(s.priceAsOf || '');
+          if (got.symbol !== 'BMW.DE' || got.currency !== 'EUR' || got.isin !== 'DE0005190003' ||
+              s.currency !== '€' || !Number.isFinite(got.marketTime) ||
+              (Number.isFinite(previousTime) && got.marketTime * 1000 < previousTime)) {
+            report.push('BMW.DE SKIP (wrong security/currency or older quote-page timestamp)');
+            skipped++;
+            continue;
+          }
+        }
         if (['SKHY.US', 'SKHY', 'MRVL.US', 'MRVL'].includes(s.code) &&
             (got.currency !== 'USD' || got.symbol !== toYahooCode(s.code))) {
           report.push(`${s.code} SKIP (expected actual ${toYahooCode(s.code)} quote in USD)`);
@@ -290,7 +301,7 @@ async function main() {
           }
         }
         newPrice = got.price;
-        src = 'yahoo';
+        src = s.code === 'BMW.DE' ? 'Tradegate BSX EUR ordinary share' : 'yahoo';
         // FX: Yahoo reports in source currency (GBP for .L, EUR for .DE/.PA/.AS).
         // For TR group .L stocks targeting EUR, convert.
         const fxSrc = needsFxConversion(s);
@@ -322,13 +333,23 @@ async function main() {
       }
     }
 
-    const formatted = formatPriceLikeOriginal(newPrice, oldPrice);
-    const parsedFormatted = isInt(oldPrice) ? parseInt(formatted, 10) : parseFloat(formatted);
+    const formatted = s.code === 'BMW.DE' ? String(Math.round(newPrice * 100) / 100) : formatPriceLikeOriginal(newPrice, oldPrice);
+    const parsedFormatted = s.code === 'BMW.DE' ? Number(formatted) : (isInt(oldPrice) ? parseInt(formatted, 10) : parseFloat(formatted));
     report.push(
       `${s.code.padEnd(10)} ${s.name.padEnd(10)} ${String(oldPrice).padEnd(10)} → ${formatted.padEnd(10)} (${src})`
     );
     if (!DRY_RUN) {
       s.price = parsedFormatted;
+      if (s.code === 'BMW.DE') {
+        const q = yahooPrices[s.code];
+        s.priceSource = q.source;
+        s.priceSourceUrl = q.sourceUrl;
+        s.priceAsOf = new Date(q.marketTime * 1000).toISOString();
+        s.priceTimestampType = q.timestampType;
+        s.priceObservedAt = new Date().toISOString();
+        s.priceNative = {symbol:q.symbol, isin:q.isin, currency:q.currency, price:q.price};
+        s.priceFx = {from:'EUR', to:'EUR', rate:1, date:null, source:'Same currency; no conversion'};
+      }
       if (['SKHY.US', 'SKHY', 'MRVL.US', 'MRVL'].includes(s.code)) {
         const quote = yahooPrices[s.code];
         const pair = needsFxConversion(s);
