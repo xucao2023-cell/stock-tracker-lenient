@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-03T07:33:27.766Z",
+  "updatedAt": "2026-11-03T14:42:00.908Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -19,7 +19,7 @@
     {
       "name": "小米集团",
       "code": "01810.HK",
-      "price": 28.58,
+      "price": 28.6,
       "currency": "HK$",
       "note": "2026年二季报后估值",
       "group": "watch_T212",
@@ -73,7 +73,7 @@
     {
       "name": "美光科技",
       "code": "MU.US",
-      "price": 743.21,
+      "price": 772.9,
       "currency": "€",
       "note": "2026-10-15｜2026财年年报后重估",
       "group": "watch_TR",
@@ -87,7 +87,7 @@
     {
       "name": "Apple",
       "code": "AAPL.US",
-      "price": 301.64,
+      "price": 293.41,
       "currency": "€",
       "note": "2026-11-03｜2026财年四季报快报后复核",
       "group": "watch_TR",
@@ -149,7 +149,7 @@
     {
       "name": "onsemi",
       "code": "ON.US",
-      "price": 70,
+      "price": 71,
       "currency": "$",
       "note": "2026-11-03｜2026年三季报后重估",
       "group": "watch_T212",
@@ -199,7 +199,7 @@
     {
       "name": "Vertiv",
       "code": "VRT.US",
-      "price": 224.24,
+      "price": 236.44,
       "currency": "$",
       "note": "2026-10-28｜2026年三季报后估值更新",
       "group": "Trading 212",
@@ -213,7 +213,7 @@
     {
       "name": "工业富联",
       "code": "601138.SH",
-      "price": 44,
+      "price": 42,
       "currency": "¥",
       "note": "2026-10-28｜2026年中报后重估",
       "group": "watch_A股",
@@ -227,7 +227,7 @@
     {
       "name": "招商银行",
       "code": "600036.SH",
-      "price": 42,
+      "price": 43,
       "currency": "¥",
       "note": "2026-10-16｜2026年中报后估值复核",
       "group": "A股",
@@ -241,7 +241,7 @@
     {
       "name": "长江电力",
       "code": "600900.SH",
-      "price": 29,
+      "price": 30,
       "currency": "¥",
       "note": "2026-10-16｜2026年中报后重估",
       "group": "A股",
@@ -255,7 +255,7 @@
     {
       "name": "中国移动",
       "code": "600941.SH",
-      "price": 103,
+      "price": 104,
       "currency": "¥",
       "note": "2026年中报后估值",
       "group": "watch_A股",
@@ -268,7 +268,7 @@
     {
       "name": "美的集团",
       "code": "000333.SZ",
-      "price": 88,
+      "price": 89,
       "currency": "¥",
       "note": "2026-10-21｜2026年中报后估值更新",
       "group": "watch_A股",
@@ -296,7 +296,7 @@
     {
       "name": "长电科技",
       "code": "600584.SH",
-      "price": 49,
+      "price": 47,
       "currency": "¥",
       "note": "2026-10-28｜2026年三季报复核·待确认",
       "group": "watch_A股",
@@ -324,7 +324,7 @@
     {
       "name": "沪电股份",
       "code": "002463.SZ",
-      "price": 83,
+      "price": 78,
       "currency": "¥",
       "note": "2026-10-28｜2026年三季报后重估",
       "group": "watch_A股",
@@ -338,7 +338,7 @@
     {
       "name": "春秋航空",
       "code": "601021.SH",
-      "price": 42.66,
+      "price": 42.46,
       "currency": "¥",
       "note": "2026-10-22｜2026年中报后复核",
       "group": "A股",
@@ -421,7 +421,7 @@
       "high1": 290,
       "low2": 151.67,
       "high2": 403.81,
-      "price": 251.47,
+      "price": 242.14,
       "currency": "$",
       "note": "2026-10-20｜2026财年三季报后重估",
       "memo": "基于26中报更新估值",
@@ -449,7 +449,7 @@
       "high1": 37,
       "low2": 9,
       "high2": 56,
-      "price": 38,
+      "price": 36,
       "currency": "¥",
       "note": "2026年中报后估值",
       "memo": "26年中报之后",
@@ -462,7 +462,7 @@
       "high1": 501.25,
       "low2": 393.84,
       "high2": 626.57,
-      "price": 452.14,
+      "price": 455.5,
       "currency": "€",
       "note": "2026-10-29｜2027财年一季报后重估",
       "memo": "基于26年中报更新估值",
@@ -476,7 +476,7 @@
       "high1": 175,
       "low2": 97,
       "high2": 224,
-      "price": 106,
+      "price": 104,
       "currency": "$",
       "note": "2026年二季报后估值",
       "memo": "已经更新呢26年半年报",
@@ -489,7 +489,7 @@
       "high1": 340,
       "low2": 257,
       "high2": 435,
-      "price": 278.99,
+      "price": 278.76,
       "currency": "$",
       "note": "2026-10-29｜2026年三季报后重估",
       "memo": "26年中报之后修正",
@@ -555,7 +555,7 @@
     {
       "name": "携程",
       "code": "TCOM.US",
-      "price": 40.99,
+      "price": 41.49,
       "currency": "$",
       "note": "2026-10-14｜2026年二季报后重估",
       "group": "Trading 212",
@@ -569,7 +569,7 @@
     {
       "name": "Cloudflare",
       "code": "NET.US",
-      "price": 265.17,
+      "price": 271.53,
       "currency": "$",
       "note": "2026-10-16｜2026年二季报后估值复核",
       "group": "watch_T212",
@@ -583,7 +583,7 @@
     {
       "name": "英伟达",
       "code": "NVDA.US",
-      "price": 180.15,
+      "price": 186.02,
       "currency": "€",
       "note": "2026-10-15｜2027财年二季报后重估",
       "group": "watch_TR",
@@ -597,7 +597,7 @@
     {
       "name": "兆易创新",
       "code": "603986.SH",
-      "price": 259.49,
+      "price": 250.16,
       "currency": "¥",
       "note": "2026-10-16｜2026年中报后重估",
       "group": "watch_A股",
@@ -611,7 +611,7 @@
     {
       "name": "宁德时代",
       "code": "300750.SZ",
-      "price": 252,
+      "price": 249,
       "currency": "¥",
       "note": "2026-10-20｜2026年中报后估值",
       "group": "watch_A股",
@@ -625,7 +625,7 @@
     {
       "name": "甲骨文",
       "code": "ORCL.US",
-      "price": 119.22,
+      "price": 123,
       "currency": "$",
       "note": "2026-11-02｜2027财年一季报及新指引后重估",
       "group": "Trading 212",
@@ -672,7 +672,7 @@
     {
       "name": "Bloom Energy",
       "code": "BE.US",
-      "price": 196.25,
+      "price": 214.17,
       "currency": "$",
       "note": "2026-10-24｜2026年三季报后重估",
       "group": "watch_T212",
@@ -727,7 +727,7 @@
     {
       "name": "英特尔",
       "code": "INTC.US",
-      "price": 53.47,
+      "price": 55.13,
       "currency": "€",
       "note": "2026-10-30｜2026年三季报后转型重估",
       "group": "watch_TR",
@@ -741,7 +741,7 @@
     {
       "name": "金安国纪",
       "code": "002636.SZ",
-      "price": 61.91,
+      "price": 58.55,
       "currency": "¥",
       "note": "2026-10-30｜2026年三季报后估值",
       "group": "watch_A股",
@@ -755,7 +755,7 @@
     {
       "name": "Nebius",
       "code": "NBIS.US",
-      "price": 141.39,
+      "price": 148.03,
       "currency": "$",
       "note": "2026-10-30｜2026年二季报后估值",
       "group": "Trading 212",
@@ -769,7 +769,7 @@
     {
       "name": "Marvell",
       "code": "MRVL.US",
-      "price": 152.83,
+      "price": 153.56,
       "currency": "€",
       "note": "2026-11-03｜2027财年三季度营收初步披露及并购后复核",
       "group": "watch_TR",
