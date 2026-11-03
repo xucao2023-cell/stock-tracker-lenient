@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-03T20:07:38.330Z",
+  "updatedAt": "2026-11-03T20:07:55.469Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -558,7 +558,7 @@
       "high1": 59,
       "low2": 50,
       "high2": 63,
-      "price": 58.37,
+      "price": 58.38,
       "currency": "€",
       "note": "2026-10-31｜2026年三季度经营公告后复核",
       "memo": "26年半年报后的估值",
@@ -572,7 +572,7 @@
       "high1": 1500,
       "low2": 970,
       "high2": 1660,
-      "price": 1389,
+      "price": 1385,
       "currency": "€",
       "note": "2026-10-20｜2026年三季报后估值复核",
       "memo": "",
