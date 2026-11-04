@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-03T21:07:35.412Z",
+  "updatedAt": "2026-11-04T00:47:30.494Z",
   "stocks": [
     {
       "name": "腾讯控股",
@@ -110,7 +110,7 @@
     {
       "name": "Vertiv",
       "code": "VRT.US",
-      "price": 235.99,
+      "price": 235.97,
       "currency": "$",
       "note": "DCF WACC 11.5% g 3.5% / PE 35-45×",
       "group": "Trading 212",
@@ -452,7 +452,7 @@
       "high1": 311,
       "low2": 195.5,
       "high2": 357.65,
-      "price": 273,
+      "price": 274,
       "currency": "$",
       "note": "",
       "memo": "",
