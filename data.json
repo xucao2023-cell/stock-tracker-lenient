@@ -1,7 +1,7 @@
 {
   "app": "stock_tracker_doppio_lenient",
   "version": 1,
-  "updatedAt": "2026-11-25T03:40:20.397Z",
+  "updatedAt": "2026-11-25T03:40:25.360Z",
   "stocks": [
     {
       "name": "腾讯控股",
